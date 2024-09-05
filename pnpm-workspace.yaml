@@ -1,7 +1,2 @@
 packages:
   - "packages/*"
-
-catalogs:
-  node-backend:
-    ts-node: ^10.9.2
-    nodemon: ^3.1.4
