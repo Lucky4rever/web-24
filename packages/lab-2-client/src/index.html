@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>JWT Auth with HTMX</title>
+  <script src="https://unpkg.com/htmx.org@1.8.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="links">
+      <button onclick="updateLevel(1)" id="1">Register</button>
+      <button onclick="updateLevel(2)" id="2">Log In</button>
+      <button onclick="updateLevel(3)" id="3">Authorize</button>
+    </div>
+  </header>
+
+  <div class="centered">
+    <main>
+      <section id="1" class="component hidden">
+        <h1>Register</h1>
+        <form hx-post="http://127.0.0.1:4000/users/register" hx-swap="innerHTML">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" required>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required>
+          <button type="submit" class="submit-button">Sign Up</button>
+        </form>
+      </section>
+
+      <section id="2" class="component hidden">
+        <h1>Log In</h1>
+        <form hx-post="http://127.0.0.1:4000/users/login" hx-swap="innerHTML"
+          hx-on="htmx:afterRequest:saveToken">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" required>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required>
+          <button type="submit" class="submit-button">Log In</button>
+        </form>
+      </section>
+
+      <section id="3" class="component hidden">
+        <h1>Authorize</h1>
+        <button id="auth-check">
+          Get Protected Data
+        </button>
+        <div id="user-info"></div>
+        
+        <script>
+          document.getElementById('auth-check').addEventListener('click', () => {
+            document.getElementById('auth-check').style = "display: none";
+            const token = localStorage.getItem('token');
+
+            fetch('http://localhost:4000/users/verify', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  const userInfoDiv = document.getElementById('user-info');
+                  userInfoDiv.innerHTML = `User: ${data.username}, Role: ${data.role}`;
+
+                  if (data.role === 'admin') {
+                    userInfoDiv.innerHTML += '<br><button onclick="alert(\'🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉\')">Fun button!!🎉</button>';
+                  }
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+          });
+        </script>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      level: 1,
+      itemLevel: 0,
+    };
+
+    window.onload = function () {
+      updateLevel(1);
+    };
+
+    function updateLevel(level) {
+      state.level = level;
+      state.itemLevel = level - 1;
+
+      selectButton();
+      showComponent();
+    }
+
+    function selectButton() {
+      document.querySelector('button.active')?.classList.remove('active');
+      document.getElementById(state.level).classList.add('active');
+    }
+
+    function showComponent() {
+      const sections = document.getElementsByClassName('component');
+
+      Array.from(sections).forEach((section) => {
+        if (section.id === state.level.toString()) {
+          section.classList.remove('hidden');
+          section.classList.add('visible');
+        } else {
+          section.classList.remove('visible');
+          section.classList.add('hidden');
+        }
+      });
+    }
+
+    document.body.addEventListener("htmx:afterRequest", async function (evt) {
+      if (!evt.detail.xhr.response) {
+        return;
+      }
+
+      const response = JSON.parse(evt.detail.xhr.response);
+      if (!response.token) {
+        return;
+      }
+
+      localStorage.setItem("token", response.token);
+      console.log('Token saved:', localStorage.getItem("token"));
+    });
+  </script>
+
+  <div id="popup" class="popup"></div>
+  
+  <script>
+    function showPopup(message, type = 'success') {
+      const popup = document.getElementById('popup');
+      popup.textContent = message;
+      popup.classList.add('show', type);
+
+      setTimeout(() => {
+        popup.classList.remove('show', type);
+      }, 3000);
+    }
+
+    document.body.addEventListener("htmx:afterRequest", function (evt) {
+      const status = evt.detail.xhr.status;
+      console.log(evt.detail.xhr);
+
+      if (status === 200) {
+        showPopup('Action successful!', 'success');
+      } else if (status >= 400) {
+        showPopup(`Something went wrong!\n${evt.detail.xhr.statusText}`, 'error');
+      }
+    });
+  </script>
+
+  <script>
+    document.getElementById("auth-check").addEventListener("click", async function () {
+      const token = localStorage.getItem('token');
+
+      if (token) {
+        const decoded = jwt_decode(token);
+
+        console.log(decoded);
+
+        const username = decoded.username || 'Unknown User';
+        document.getElementById('user-info').textContent = `Logged in as: ${username}`;
+      } else {
+        console.log('Token not found');
+      }
+    });
+  </script>
+
+</body>
+</html>
