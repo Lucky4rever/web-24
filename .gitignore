@@ -3,3 +3,9 @@ package-lock.json
 yarn.lock
 
 node_modules/
+output/
+dist/
+
+.env
+
+.parcel-cache/
