@@ -13,7 +13,7 @@ const renderContent = async (path: string) => {
     route.component(app);
 
     render(NavbarComponent(), document.body);
-  } catch (error) {
+  } catch {
     throw new Error(`Route '${path}' not found`);
   }
 };
