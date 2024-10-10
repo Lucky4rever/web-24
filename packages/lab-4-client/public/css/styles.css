@@ -98,10 +98,15 @@ button:focus {
 }    
 
 .container {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 500px;
+    margin-block: 2rem;
     text-align: center;
-    padding-top: 50vh;
     font-size: large;
-}    
+}
 
 .form-box {
     background: rgba(9, 54, 62, 0.327);
@@ -154,4 +159,38 @@ img.icons {
 .form-right-side {
     align-items: flex-end;
     justify-content: space-between;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  color: rgb(51, 48, 48);
+}
+
+.box {
+  background-color: white;
+  padding: 1rem 2rem;
+  box-shadow: 10px 10px 30px rgb(197, 196, 196);
+}
+
+button {
+  background-color: rgb(32, 147, 247);
+  border: 0;
+  padding: 1rem;
+  font-size: medium;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: fit-content;
 }

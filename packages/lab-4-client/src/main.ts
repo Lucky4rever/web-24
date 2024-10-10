@@ -1,4 +1,3 @@
-import './style.css';
 import { registerBrowserBackAndForth, renderInitialPage } from './utils/content';
 
 (function bootup() {

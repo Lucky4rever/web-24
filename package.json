@@ -6,7 +6,7 @@
     "start:lab-1": "pnpm --filter ./packages/lab-1 start",
     "start:lab-2": "pnpm concurrently 'pnpm --filter ./packages/lab-2-client start' 'pnpm --filter ./packages/lab-2-server start'",
     "start:lab-3": "pnpm --filter ./packages/lab-3 start",
-    "start:lab-4": "pnpm --filter ./packages/lab-4 start",
+    "start:lab-4": "pnpm concurrently 'pnpm --filter ./packages/lab-4-client start' 'pnpm --filter ./packages/lab-4-server start'",
     "start:lab-5": "pnpm --filter ./packages/lab-5 start",
     "start:lab-6": "pnpm --filter ./packages/lab-6 start"
   },

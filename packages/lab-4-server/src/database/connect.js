@@ -1,6 +1,13 @@
 import { connect } from 'mongoose';
+import dotenv from 'dotenv';
 
-const uri = "mongodb+srv://ilovepolsha:JpkRb6UNubWUTaiJ@kpibackendlab5.d4qdufm.mongodb.net/Lab5?retryWrites=true&w=majority&appName=KPIBackendLab5";
+dotenv.config();
+
+const uri = process.env.MONGODB_URI;
+
+if (!uri) {
+  throw new Error('MONGODB_URI не знайдено в .env файлі');
+}
 
 export default () => connect(uri)
   .then(() => {
