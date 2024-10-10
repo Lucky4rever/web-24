@@ -4,7 +4,6 @@ import cors from 'cors';
 
 import connect from './database/connect.js';
 import { AppRouter } from './routes/index.js';
-// import postController from './controllers/post.controller.js';
 
 const app = express();
 const router = new AppRouter(app);
@@ -22,12 +21,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 router.init();
-
-// app.get('/post/:id', postController.getPostById.bind(postController));
-// app.get('/posts', postController.getAllPosts.bind(postController));
-// app.post('/post/create', postController.createPost.bind(postController));
-// app.post('/post/update/:id', postController.updatePost.bind(postController));
-// app.get('/post/delete/:id', postController.deletePost.bind(postController));
 
 const port = app.get('port');
 // eslint-disable-next-line no-console
