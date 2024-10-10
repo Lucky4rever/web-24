@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start:lab-1": "pnpm --filter ./packages/lab-1 start",
-    "start:lab-2": "pnpm --filter ./packages/lab-2 start",
+    "start:lab-2": "pnpm concurrently 'pnpm --filter ./packages/lab-2-client start' 'pnpm --filter ./packages/lab-2-server start'",
     "start:lab-3": "pnpm --filter ./packages/lab-3 start",
     "start:lab-4": "pnpm --filter ./packages/lab-4 start",
     "start:lab-5": "pnpm --filter ./packages/lab-5 start",
@@ -15,5 +15,8 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "concurrently": "^9.0.1"
   }
 }

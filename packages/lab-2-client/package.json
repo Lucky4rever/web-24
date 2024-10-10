@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/index.html --port 3000"
+    "start": "parcel src/index.html --port 3000"
   },
   "keywords": [],
   "author": "",
